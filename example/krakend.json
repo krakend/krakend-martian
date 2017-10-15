@@ -1,0 +1,114 @@
+{
+    "version": 1,
+    "name": "My lovely gateway",
+    "port": 8080,
+    "cache_ttl": 3600,
+    "timeout": "3s",
+    "endpoints": [
+        {
+            "endpoint": "/supu",
+            "method": "GET",
+            "backend": [
+                {
+                    "host": [
+                        "http://127.0.0.1:8080"
+                    ],
+                    "url_pattern": "/__debug/supu",
+                    "extra_config": {
+                        "github.com/krakend-martian/proxy": {
+                            "fifo.Group": {
+                                "scope": ["request", "response"],
+                                "aggregateErrors": true,
+                                "modifiers": [
+                                {
+                                    "header.Modifier": {
+                                        "scope": ["request", "response"],
+                                        "name" : "X-Martian",
+                                        "value" : "ouh yeah!"
+                                    }
+                                },
+                                {
+                                    "body.Modifier": {
+                                        "scope": ["request"],
+                                        "contentType" : "application/json",
+                                        "body" : "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
+                                    }
+                                },
+                                {
+                                    "header.RegexFilter": {
+                                        "scope": ["request"],
+                                        "header" : "X-Neptunian",
+                                        "regex" : "no!",
+                                        "modifier": {
+                                            "header.Modifier": {
+                                                "scope": ["request"],
+                                                "name" : "X-Martian-New",
+                                                "value" : "some value"
+                                            }
+                                        }
+                                    }
+                                }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/github/{user}",
+            "method": "GET",
+            "backend": [
+                {
+                    "host": [
+                        "https://api.github.com"
+                    ],
+                    "url_pattern": "/",
+                    "whitelist": [
+                        "authorizations_url",
+                        "code_search_url"
+                    ],
+                    "disable_host_sanitize": true,
+                    "extra_config": {
+                        "github.com/krakend-martian/proxy": {
+                            "fifo.Group": {
+                                "scope": ["request", "response"],
+                                "aggregateErrors": true,
+                                "modifiers": [
+                                {
+                                    "header.Modifier": {
+                                        "scope": ["request", "response"],
+                                        "name" : "X-Martian",
+                                        "value" : "ouh yeah!"
+                                    }
+                                },
+                                {
+                                    "body.Modifier": {
+                                        "scope": ["request"],
+                                        "contentType" : "application/json",
+                                        "body" : "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
+                                    }
+                                },
+                                {
+                                    "header.RegexFilter": {
+                                        "scope": ["request"],
+                                        "header" : "X-Neptunian",
+                                        "regex" : "no!",
+                                        "modifier": {
+                                            "header.Modifier": {
+                                                "scope": ["request"],
+                                                "name" : "X-Martian-New",
+                                                "value" : "some value"
+                                            }
+                                        }
+                                    }
+                                }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
