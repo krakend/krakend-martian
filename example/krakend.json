@@ -15,7 +15,7 @@
                     ],
                     "url_pattern": "/__debug/supu",
                     "extra_config": {
-                        "github.com/krakend-martian/proxy": {
+                        "github.com/devopsfaith/krakend-martian": {
                             "fifo.Group": {
                                 "scope": ["request", "response"],
                                 "aggregateErrors": true,
@@ -70,7 +70,7 @@
                     ],
                     "disable_host_sanitize": true,
                     "extra_config": {
-                        "github.com/krakend-martian/proxy": {
+                        "github.com/devopsfaith/krakend-martian": {
                             "fifo.Group": {
                                 "scope": ["request", "response"],
                                 "aggregateErrors": true,

@@ -12,7 +12,7 @@ import (
 	krakendgin "github.com/devopsfaith/krakend/router/gin"
 	"github.com/gin-gonic/gin"
 
-	martian "github.com/devopsfaith/krakend-martian/proxy"
+	"github.com/devopsfaith/krakend-martian"
 )
 
 func main() {
