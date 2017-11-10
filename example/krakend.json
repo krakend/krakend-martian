@@ -5,7 +5,7 @@
     "cache_ttl": 3600,
     "timeout": "3s",
     "extra_config": {
-      "git_hubcom/devopsfaith/krakend-gologging": {
+      "github_com/devopsfaith/krakend-gologging": {
         "level":  "INFO",
         "prefix": "[KRAKEND]",
         "syslog": false,
