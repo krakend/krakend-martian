@@ -20,7 +20,7 @@ Build and run the example
 
 	$ cd example
 	$ go build
-	$ ./example -c krakend.json -d -l DEBUG
+	$ ./example -c krakend.json -d
 
 Send a request to the configured endpoint
 
