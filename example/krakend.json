@@ -4,6 +4,14 @@
     "port": 8080,
     "cache_ttl": 3600,
     "timeout": "3s",
+    "extra_config": {
+      "githubcom/devopsfaith/krakend-gologging": {
+        "level":  "INFO",
+        "prefix": "[KRAKEND]",
+        "syslog": false,
+        "stdout": true
+      }
+    },
     "endpoints": [
         {
             "endpoint": "/supu",
