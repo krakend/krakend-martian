@@ -2,6 +2,8 @@
 
 The `krakend-martian` package integrates the martian project into the KrakenD framework.
 
+**WARNING: This code is not ready for production yet.**
+
 ## How to use it
 
 add your martian DSL definition under the "github.com/krakend-martian/proxy" namespace of the backend section of the config file

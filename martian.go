@@ -18,7 +18,14 @@ import (
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
 // If there is any problem parsing the extra config data, it just uses the injected request executor.
 func NewBackendFactory(logger logging.Logger, re proxy.HTTPRequestExecutor) proxy.BackendFactory {
+	return NewConfiguredBackendFactory(logger, func(_ *config.Backend) proxy.HTTPRequestExecutor { return re })
+}
+
+// NewConfiguredBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
+// If there is any problem parsing the extra config data, it just uses the injected request executor.
+func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) proxy.HTTPRequestExecutor) proxy.BackendFactory {
 	return func(remote *config.Backend) proxy.Proxy {
+		re := ref(remote)
 		result, ok := ConfigGetter(remote.ExtraConfig).(MartianResult)
 		if !ok {
 			return proxy.NewHTTPProxyWithHTTPExecutor(remote, re, remote.Decoder)
