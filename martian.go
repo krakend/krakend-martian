@@ -11,6 +11,8 @@ import (
 	"github.com/devopsfaith/krakend/config"
 	"github.com/devopsfaith/krakend/logging"
 	"github.com/devopsfaith/krakend/proxy"
+
+	// import the required martian packages so they can be used
 	_ "github.com/google/martian/body"
 	_ "github.com/google/martian/fifo"
 	_ "github.com/google/martian/header"

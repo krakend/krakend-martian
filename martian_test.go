@@ -77,7 +77,7 @@ func TestHTTPRequestExecutor_ok(t *testing.T) {
 		t.Errorf("unexpected response status: %d", resp.StatusCode)
 	}
 	if resp.Header.Get("X-Custom") != "one" {
-		t.Errorf("unexpected custom header: %d", resp.Header.Get("X-Custom"))
+		t.Errorf("unexpected custom header: %s", resp.Header.Get("X-Custom"))
 	}
 
 	req, _ = http.NewRequest("GET", "url", ioutil.NopCloser(bytes.NewBufferString("")))
@@ -94,7 +94,7 @@ func TestHTTPRequestExecutor_ok(t *testing.T) {
 		t.Errorf("unexpected response status: %d", resp.StatusCode)
 	}
 	if resp.Header.Get("X-Custom") != "one" {
-		t.Errorf("unexpected custom header: %d", resp.Header.Get("X-Custom"))
+		t.Errorf("unexpected custom header: %s", resp.Header.Get("X-Custom"))
 	}
 }
 
