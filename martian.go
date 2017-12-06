@@ -1,9 +1,11 @@
 package martian
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/devopsfaith/krakend/config"
@@ -26,7 +28,7 @@ func NewBackendFactory(logger logging.Logger, re proxy.HTTPRequestExecutor) prox
 func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) proxy.HTTPRequestExecutor) proxy.BackendFactory {
 	return func(remote *config.Backend) proxy.Proxy {
 		re := ref(remote)
-		result, ok := ConfigGetter(remote.ExtraConfig).(MartianResult)
+		result, ok := ConfigGetter(remote.ExtraConfig).(Result)
 		if !ok {
 			return proxy.NewHTTPProxyWithHTTPExecutor(remote, re, remote.Decoder)
 		}
@@ -45,44 +47,67 @@ func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend
 // HTTPRequestExecutor creates a wrapper over the received request executor, so the martian modifiers can be
 // executed before and after the execution of the request
 func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) proxy.HTTPRequestExecutor {
-	return func(ctx context.Context, req *http.Request) (*http.Response, error) {
-		result.RequestModifier().ModifyRequest(req)
-		resp, err := re(ctx, req)
-		result.ResponseModifier().ModifyResponse(resp)
-		return resp, err
+	return func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+		if req.Body == nil {
+			req.Body = ioutil.NopCloser(bytes.NewBufferString(""))
+		}
+		if req.Header == nil {
+			req.Header = http.Header{}
+		}
+		if err = result.RequestModifier().ModifyRequest(req); err != nil {
+			return
+		}
+
+		resp, err = re(ctx, req)
+		if err != nil {
+			return
+		}
+		if resp == nil {
+			err = ErrEmptyResponse
+			return
+		}
+		if resp.Body == nil {
+			resp.Body = ioutil.NopCloser(bytes.NewBufferString(""))
+		}
+		if resp.Header == nil {
+			resp.Header = http.Header{}
+		}
+
+		err = result.ResponseModifier().ModifyResponse(resp)
+		return
 	}
 }
 
 // Namespace is the key to look for extra configuration details
 const Namespace = "github.com/devopsfaith/krakend-martian"
 
-// MartianResult is a simple wrapper over the parse.FromJSON response tuple
-type MartianResult struct {
+// Result is a simple wrapper over the parse.FromJSON response tuple
+type Result struct {
 	Result *parse.Result
 	Err    error
 }
 
 // ConfigGetter implements the config.ConfigGetter interface. It parses the extra config for the
-// martian adapter and returns a MartianResult wrapping the results.
+// martian adapter and returns a Result wrapping the results.
 func ConfigGetter(e config.ExtraConfig) interface{} {
 	cfg, ok := e[Namespace]
 	if !ok {
-		return MartianResult{nil, ErrEmptyValue}
+		return Result{nil, ErrEmptyValue}
 	}
 
 	data, ok := cfg.(map[string]interface{})
 	if !ok {
-		return MartianResult{nil, ErrBadValue}
+		return Result{nil, ErrBadValue}
 	}
 
 	raw, err := json.Marshal(data)
 	if err != nil {
-		return MartianResult{nil, ErrMarshallingValue}
+		return Result{nil, ErrMarshallingValue}
 	}
 
 	r, err := parse.FromJSON(raw)
 
-	return MartianResult{r, err}
+	return Result{r, err}
 }
 
 var (
@@ -92,4 +117,6 @@ var (
 	ErrBadValue = fmt.Errorf("casting the extra config for the martian module")
 	// ErrMarshallingValue is the error returned when the config map can not be marshalled again
 	ErrMarshallingValue = fmt.Errorf("marshalling the extra config for the martian module")
+	// ErrEmptyResponse is the error returned when the modifier receives a nil response
+	ErrEmptyResponse = fmt.Errorf("getting the http response from the request executor")
 )
