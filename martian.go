@@ -56,8 +56,11 @@ func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) pro
 		if req.Header == nil {
 			req.Header = http.Header{}
 		}
-		if err = result.RequestModifier().ModifyRequest(req); err != nil {
-			return
+		requestModifier := result.RequestModifier()
+		if requestModifier != nil {
+			if err = requestModifier.ModifyRequest(req); err != nil {
+				return
+			}
 		}
 
 		resp, err = re(ctx, req)
@@ -75,7 +78,10 @@ func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) pro
 			resp.Header = http.Header{}
 		}
 
-		err = result.ResponseModifier().ModifyResponse(resp)
+		responseModifier := result.ResponseModifier()
+		if responseModifier != nil {
+			err = responseModifier.ModifyResponse(resp)
+		}
 		return
 	}
 }
