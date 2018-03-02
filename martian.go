@@ -17,6 +17,7 @@ import (
 	_ "github.com/google/martian/fifo"
 	_ "github.com/google/martian/header"
 	"github.com/google/martian/parse"
+	"github.com/google/martian"
 )
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
@@ -50,19 +51,9 @@ func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend
 // executed before and after the execution of the request
 func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) proxy.HTTPRequestExecutor {
 	return func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-		if req.Body == nil {
-			req.Body = ioutil.NopCloser(bytes.NewBufferString(""))
+		if err = modifyRequest(result.RequestModifier(), req); err != nil {
+			return
 		}
-		if req.Header == nil {
-			req.Header = http.Header{}
-		}
-		requestModifier := result.RequestModifier()
-		if requestModifier != nil {
-			if err = requestModifier.ModifyRequest(req); err != nil {
-				return
-			}
-		}
-
 		resp, err = re(ctx, req)
 		if err != nil {
 			return
@@ -71,19 +62,39 @@ func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) pro
 			err = ErrEmptyResponse
 			return
 		}
-		if resp.Body == nil {
-			resp.Body = ioutil.NopCloser(bytes.NewBufferString(""))
-		}
-		if resp.Header == nil {
-			resp.Header = http.Header{}
-		}
-
-		responseModifier := result.ResponseModifier()
-		if responseModifier != nil {
-			err = responseModifier.ModifyResponse(resp)
+		if err = modifyResponse(result.ResponseModifier(), resp); err != nil {
+			return
 		}
 		return
 	}
+}
+
+func modifyRequest(mod martian.RequestModifier, req *http.Request) error {
+	if req.Body == nil {
+		req.Body = ioutil.NopCloser(bytes.NewBufferString(""))
+	}
+	if req.Header == nil {
+		req.Header = http.Header{}
+	}
+
+	if mod == nil {
+		return nil
+	}
+	return mod.ModifyRequest(req)
+}
+
+func modifyResponse(mod martian.ResponseModifier, resp *http.Response) error {
+	if resp.Body == nil {
+		resp.Body = ioutil.NopCloser(bytes.NewBufferString(""))
+	}
+	if resp.Header == nil {
+		resp.Header = http.Header{}
+	}
+
+	if mod == nil {
+		return nil
+	}
+	return mod.ModifyResponse(resp)
 }
 
 // Namespace is the key to look for extra configuration details
