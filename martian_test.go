@@ -274,6 +274,56 @@ func TestNewBackendFactory_ok(t *testing.T) {
 	}
 }
 
+func TestHTTPRequestExecutor_NoPanicWhenScopeLimitedToResponse(t *testing.T) {
+	r, err := parse.FromJSON([]byte(responseOnlyDefinition))
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	re := HTTPRequestExecutor(r, func(_ context.Context, req *http.Request) (resp *http.Response, err error) {
+		resp = &http.Response{
+			Request:    req,
+			StatusCode: 200,
+		}
+		return
+	})
+
+	req, _ := http.NewRequest("GET", "url", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if err != nil {
+		t.Error(err)
+	}
+	if resp.StatusCode != 200 {
+		t.Errorf("unexpected response: %v", *resp)
+	}
+}
+
+func TestHTTPRequestExecutor_NoPanicWhenScopeLimitedToRequest(t *testing.T) {
+	r, err := parse.FromJSON([]byte(requestOnlyDefinition))
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	re := HTTPRequestExecutor(r, func(_ context.Context, req *http.Request) (resp *http.Response, err error) {
+		resp = &http.Response{
+			Request:    req,
+			StatusCode: 200,
+		}
+		return
+	})
+
+	req, _ := http.NewRequest("GET", "url", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if err != nil {
+		t.Error(err)
+	}
+	if resp.StatusCode != 200 {
+		t.Errorf("unexpected response: %v", *resp)
+	}
+}
+
 const definition = `{
     "fifo.Group": {
         "scope": ["request", "response"],
@@ -305,6 +355,59 @@ const definition = `{
                         "value" : "some value"
                     }
                 }
+            }
+        }
+        ]
+    }
+}`
+
+const requestOnlyDefinition = `{
+    "fifo.Group": {
+        "scope": ["request"],
+        "aggregateErrors": true,
+        "modifiers": [
+        {
+            "header.Modifier": {
+                "scope": ["request"],
+                "name" : "X-Martian",
+                "value" : "ouh yeah!"
+            }
+        },
+        {
+            "body.Modifier": {
+                "scope": ["request"],
+                "contentType" : "application/json",
+                "body" : "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
+            }
+        },
+        {
+            "header.RegexFilter": {
+                "scope": ["request"],
+                "header" : "X-Neptunian",
+                "regex" : "no!",
+                "modifier": {
+                    "header.Modifier": {
+                        "scope": ["request"],
+                        "name" : "X-Martian-New",
+                        "value" : "some value"
+                    }
+                }
+            }
+        }
+        ]
+    }
+}`
+
+const responseOnlyDefinition = `{
+    "fifo.Group": {
+        "scope": ["response"],
+        "aggregateErrors": true,
+        "modifiers": [
+        {
+            "header.Modifier": {
+                "scope": ["response"],
+                "name" : "X-Martian",
+                "value" : "ouh yeah!"
             }
         }
         ]
