@@ -247,7 +247,7 @@ func TestNewBackendFactory_ok(t *testing.T) {
 					"scope":           []interface{}{"request", "response"},
 					"aggregateErrors": true,
 					"modifiers": []map[string]interface{}{
-						map[string]interface{}{
+						{
 							"header.Modifier": map[string]interface{}{
 								"scope": []interface{}{"request", "response"},
 								"name":  "X-Martian",
