@@ -9,10 +9,13 @@ const (
 	ScopeResponse Scope = "response"
 )
 
+// Register is the struct containing all the martian components
 type Register map[string]Component
 
+// Scope defines the scope of the component
 type Scope string
 
+// Component contains the scope and the module factory
 type Component struct {
 	Scope       []Scope
 	NewFromJSON func(b []byte) (interface{}, error)
@@ -23,6 +26,7 @@ var (
 	mutex    = &sync.RWMutex{}
 )
 
+// Set adds the received data into the register
 func Set(name string, scope []Scope, f func(b []byte) (interface{}, error)) {
 	mutex.Lock()
 	register[name] = Component{
@@ -32,6 +36,7 @@ func Set(name string, scope []Scope, f func(b []byte) (interface{}, error)) {
 	mutex.Unlock()
 }
 
+// Get retrieves a copy of the register
 func Get() Register {
 	mutex.RLock()
 	r := make(Register, len(register))

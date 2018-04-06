@@ -5,6 +5,8 @@ import (
 	"github.com/google/martian/parse"
 )
 
+// Register gets all the modifiers from the krakend-martian register and registers
+// them into the martian parser
 func Register() {
 	for k, component := range register.Get() {
 		parse.Register(k, func(b []byte) (*parse.Result, error) {
@@ -13,12 +15,15 @@ func Register() {
 				return nil, err
 			}
 
-			modifierType := make([]parse.ModifierType, len(component.Scope))
-			for k, s := range component.Scope {
-				modifierType[k] = parse.ModifierType(s)
-			}
-
-			return parse.NewResult(v, modifierType)
+			return parse.NewResult(v, toModifierType(component.Scope))
 		})
 	}
+}
+
+func toModifierType(scopes []register.Scope) []parse.ModifierType {
+	modifierType := make([]parse.ModifierType, len(scopes))
+	for k, s := range scopes {
+		modifierType[k] = parse.ModifierType(s)
+	}
+	return modifierType
 }

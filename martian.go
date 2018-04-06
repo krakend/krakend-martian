@@ -13,11 +13,11 @@ import (
 	"github.com/devopsfaith/krakend/proxy"
 
 	// import the required martian packages so they can be used
+	"github.com/google/martian"
 	_ "github.com/google/martian/body"
 	_ "github.com/google/martian/fifo"
 	_ "github.com/google/martian/header"
 	"github.com/google/martian/parse"
-	"github.com/google/martian"
 )
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
