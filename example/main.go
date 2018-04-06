@@ -5,8 +5,8 @@ import (
 	"flag"
 	"log"
 
-	"github.com/devopsfaith/krakend/config/viper"
 	"github.com/devopsfaith/krakend-gologging"
+	"github.com/devopsfaith/krakend/config/viper"
 	"github.com/devopsfaith/krakend/proxy"
 	krakendgin "github.com/devopsfaith/krakend/router/gin"
 	"github.com/gin-gonic/gin"
