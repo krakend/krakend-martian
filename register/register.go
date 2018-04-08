@@ -1,48 +1,35 @@
 package register
 
-import "sync"
-
 const (
 	// ScopeRequest modifies an HTTP request.
-	ScopeRequest Scope = "request"
+	ScopeRequest = "request"
 	// ScopeResponse modifies an HTTP response.
-	ScopeResponse Scope = "response"
+	ScopeResponse = "response"
+
+	// Namespace is the key to look for extra configuration details
+	Namespace = "github.com/devopsfaith/krakend-martian"
 )
 
-// Register is the struct containing all the martian components
-type Register map[string]Component
-
-// Scope defines the scope of the component
-type Scope string
+// NewComponent returns component ready to be injected into the register
+func NewComponent(scope []string, newFromJSON func(b []byte) (interface{}, error)) *Component {
+	return &Component{
+		scope:       scope,
+		newFromJSON: newFromJSON,
+	}
+}
 
 // Component contains the scope and the module factory
 type Component struct {
-	Scope       []Scope
-	NewFromJSON func(b []byte) (interface{}, error)
+	scope       []string
+	newFromJSON func(b []byte) (interface{}, error)
 }
 
-var (
-	register = Register{}
-	mutex    = &sync.RWMutex{}
-)
-
-// Set adds the received data into the register
-func Set(name string, scope []Scope, f func(b []byte) (interface{}, error)) {
-	mutex.Lock()
-	register[name] = Component{
-		Scope:       scope,
-		NewFromJSON: f,
-	}
-	mutex.Unlock()
+// NewFromJSON implements the martian.Component interface
+func (c *Component) NewFromJSON(b []byte) (interface{}, error) {
+	return c.newFromJSON(b)
 }
 
-// Get retrieves a copy of the register
-func Get() Register {
-	mutex.RLock()
-	r := make(Register, len(register))
-	for k, v := range register {
-		r[k] = v
-	}
-	mutex.RUnlock()
-	return r
+// Scopes implements the martian.Component interface
+func (c *Component) Scopes() []string {
+	return c.scope
 }

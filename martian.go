@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/devopsfaith/krakend-martian/register"
 	"github.com/devopsfaith/krakend/config"
 	"github.com/devopsfaith/krakend/logging"
 	"github.com/devopsfaith/krakend/proxy"
@@ -98,7 +99,7 @@ func modifyResponse(mod martian.ResponseModifier, resp *http.Response) error {
 }
 
 // Namespace is the key to look for extra configuration details
-const Namespace = "github.com/devopsfaith/krakend-martian"
+const Namespace = register.Namespace
 
 // Result is a simple wrapper over the parse.FromJSON response tuple
 type Result struct {
