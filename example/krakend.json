@@ -1,12 +1,12 @@
 {
-    "version": 1,
+    "version": 2,
     "name": "My lovely gateway",
     "port": 8080,
     "cache_ttl": 3600,
     "timeout": "3s",
     "extra_config": {
       "github_com/devopsfaith/krakend-gologging": {
-        "level":  "INFO",
+        "level":  "DEBUG",
         "prefix": "[KRAKEND]",
         "syslog": false,
         "stdout": true
@@ -19,102 +19,25 @@
             "backend": [
                 {
                     "host": [
-                        "http://127.0.0.1:8080"
+                        "https://api.chucknorris.io/"
                     ],
-                    "url_pattern": "/__debug/supu",
+                    "url_pattern": "/jokes/random",
                     "extra_config": {
                         "github.com/devopsfaith/krakend-martian": {
-                            "fifo.Group": {
-                                "scope": ["request", "response"],
-                                "aggregateErrors": true,
-                                "modifiers": [
-                                {
-                                    "header.Modifier": {
-                                        "scope": ["request", "response"],
-                                        "name" : "X-Martian",
-                                        "value" : "ouh yeah!"
-                                    }
-                                },
-                                {
-                                    "body.Modifier": {
-                                        "scope": ["request"],
-                                        "contentType" : "application/json",
-                                        "body" : "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
-                                    }
-                                },
-                                {
-                                    "header.RegexFilter": {
-                                        "scope": ["request"],
-                                        "header" : "X-Neptunian",
-                                        "regex" : "no!",
-                                        "modifier": {
-                                            "header.Modifier": {
-                                                "scope": ["request"],
-                                                "name" : "X-Martian-New",
-                                                "value" : "some value"
-                                            }
-                                        }
-                                    }
-                                }
-                                ]
+                            "body.Modifier": {
+                                "scope": ["request","response"],
+                                "body": "eyJhdXRob3IiOiJDaHVjayBOb3JyaXMifQ=="
                             }
                         }
                     }
-                }
-            ]
-        },
-        {
-            "endpoint": "/github/{user}",
-            "method": "GET",
-            "backend": [
+                },
                 {
                     "host": [
-                        "https://api.github.com"
+                        "https://api.chucknorris.io/"
                     ],
-                    "url_pattern": "/",
-                    "whitelist": [
-                        "authorizations_url",
-                        "code_search_url"
-                    ],
-                    "disable_host_sanitize": true,
-                    "extra_config": {
-                        "github.com/devopsfaith/krakend-martian": {
-                            "fifo.Group": {
-                                "scope": ["request", "response"],
-                                "aggregateErrors": true,
-                                "modifiers": [
-                                {
-                                    "header.Modifier": {
-                                        "scope": ["request", "response"],
-                                        "name" : "X-Martian",
-                                        "value" : "ouh yeah!"
-                                    }
-                                },
-                                {
-                                    "body.Modifier": {
-                                        "scope": ["request"],
-                                        "contentType" : "application/json",
-                                        "body" : "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
-                                    }
-                                },
-                                {
-                                    "header.RegexFilter": {
-                                        "scope": ["request"],
-                                        "header" : "X-Neptunian",
-                                        "regex" : "no!",
-                                        "modifier": {
-                                            "header.Modifier": {
-                                                "scope": ["request"],
-                                                "name" : "X-Martian-New",
-                                                "value" : "some value"
-                                            }
-                                        }
-                                    }
-                                }
-                                ]
-                            }
-                        }
-                    }
+                    "url_pattern": "/jokes/random",
+                    "whitelist": [ "value" ],
+                    "mapping": { "value": "joke" }
                 }
             ]
         }
