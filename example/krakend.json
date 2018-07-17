@@ -19,25 +19,25 @@
             "backend": [
                 {
                     "host": [
-                        "https://api.chucknorris.io/"
+                        "http://127.0.0.1:8000"
                     ],
-                    "url_pattern": "/jokes/random",
+                    "url_pattern": "/__debug/supu",
                     "extra_config": {
                         "github.com/devopsfaith/krakend-martian": {
-                            "body.Modifier": {
-                                "scope": ["request","response"],
-                                "body": "eyJhdXRob3IiOiJDaHVjayBOb3JyaXMifQ=="
+                            "fifo.Group": {
+                                "scope": ["request", "response"],
+                                "aggregateErrors": true,
+                                "modifiers": [
+                                    {
+                                        "body.Modifier": {
+                                            "scope": ["request","response"],
+                                            "body": "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
-                },
-                {
-                    "host": [
-                        "https://api.chucknorris.io/"
-                    ],
-                    "url_pattern": "/jokes/random",
-                    "whitelist": [ "value" ],
-                    "mapping": { "value": "joke" }
                 }
             ]
         }

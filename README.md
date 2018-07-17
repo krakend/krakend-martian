@@ -18,8 +18,6 @@ Check the [example](github.com/krakend-martian/tree/master/example) folder for a
 
 ## Example
 
-The martian example is built on top of [chuknorris.io](https://api.chucknorris.io/) REST API.
-
 * Build and run krakend edition with martian
 
 ```
@@ -32,17 +30,29 @@ $ GOPATH/bin/example -c example/krakend.json -d -p 8000
 
 ```
 $ curl -i 127.0.0.1:8000/supu
- HTTP/1.1 200 OK
- Cache-Control: public, max-age=0
- Content-Type: application/json; charset=utf-8
- X-Krakend: Version undefined
- X-Krakend-Completed: true
- Date: Tue, 10 Jul 2018 13:15:04 GMT
- Content-Length: 80
+  HTTP/1.1 200 OK
+  Cache-Control: public, max-age=0
+  Content-Type: application/json; charset=utf-8
+  X-Krakend: Version undefined
+  X-Krakend-Completed: true
+  Date: Tue, 17 Jul 2018 11:56:33 GMT
+  Content-Length: 19
 
- {"author":"Chuck Norris","joke":"People pray to God. God prays to Chuck Norris"}
-```
+  {"msg":"you rock!"}
+ ```
 
 And check the logs of the KrakenD: the request modifiers has done their job!
-See how `"author":"Chuck Norris"` was added to the payload.
+See how `{"msg":"you rock!"}` was added to the payload.
 
+```
+[KRAKEND] ▶ DEBUG config: {[0xc4201839a0] 3s 3.6µs [] 8000 2  map[github_com/devopsfaith/krakend-gologging:map[prefix:[KRAKEND] stdout:true level:DEBUG syslog:false]] 0s 0s 0s 0s false false 0 250 0s 0s 0s 0s 0s 0s false <nil> true 1}
+[KRAKEND] ▶ DEBUG Debug enabled
+[KRAKEND] ▶ DEBUG Method: GET
+[KRAKEND] ▶ DEBUG URL: /__debug/supu
+[KRAKEND] ▶ DEBUG Query: map[]
+[KRAKEND] ▶ DEBUG Params: [{param /supu}]
+[KRAKEND] ▶ DEBUG Headers: map[User-Agent:[KrakenD Version undefined] Content-Length:[19] Content-Type:[] X-Forwarded-For:[127.0.0.1] Accept-Encoding:[gzip]]
+[KRAKEND] ▶ DEBUG Body: {"msg":"you rock!"}
+[GIN] | 200 |     313.798µs |       127.0.0.1 | GET      /__debug/supu
+[GIN] | 200 |    1.556445ms |       127.0.0.1 | GET      /supu
+```
