@@ -6,6 +6,7 @@
   branch = "master"
   name = "github.com/devopsfaith/krakend-gologging"
 
+
 [[constraint]]
   branch = "master"
   name = "github.com/devopsfaith/krakend-viper"
@@ -17,6 +18,14 @@
 [[constraint]]
   name = "github.com/google/martian"
   version = "2.1.0"
+
+[[override]]
+  name = "github.com/op/go-logging"
+  revision = "970db520ece77730c7e4724c61121037378659d9"
+
+[[override]]
+  name = "github.com/google/martian"
+  revision = "140c935a5d0d15e2cdc24b1f58668f410497fc3c"
 
 [prune]
   go-tests = true
