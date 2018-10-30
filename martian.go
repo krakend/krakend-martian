@@ -11,6 +11,7 @@ import (
 	"github.com/devopsfaith/krakend/config"
 	"github.com/devopsfaith/krakend/logging"
 	"github.com/devopsfaith/krakend/proxy"
+	"github.com/devopsfaith/krakend/transport/http/client"
 
 	// import the required martian packages so they can be used
 	"github.com/google/martian"
@@ -22,13 +23,13 @@ import (
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
 // If there is any problem parsing the extra config data, it just uses the injected request executor.
-func NewBackendFactory(logger logging.Logger, re proxy.HTTPRequestExecutor) proxy.BackendFactory {
-	return NewConfiguredBackendFactory(logger, func(_ *config.Backend) proxy.HTTPRequestExecutor { return re })
+func NewBackendFactory(logger logging.Logger, re client.HTTPRequestExecutor) proxy.BackendFactory {
+	return NewConfiguredBackendFactory(logger, func(_ *config.Backend) client.HTTPRequestExecutor { return re })
 }
 
 // NewConfiguredBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
 // If there is any problem parsing the extra config data, it just uses the injected request executor.
-func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) proxy.HTTPRequestExecutor) proxy.BackendFactory {
+func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) client.HTTPRequestExecutor) proxy.BackendFactory {
 	return func(remote *config.Backend) proxy.Proxy {
 		re := ref(remote)
 		result, ok := ConfigGetter(remote.ExtraConfig).(Result)
@@ -49,7 +50,7 @@ func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend
 
 // HTTPRequestExecutor creates a wrapper over the received request executor, so the martian modifiers can be
 // executed before and after the execution of the request
-func HTTPRequestExecutor(result *parse.Result, re proxy.HTTPRequestExecutor) proxy.HTTPRequestExecutor {
+func HTTPRequestExecutor(result *parse.Result, re client.HTTPRequestExecutor) client.HTTPRequestExecutor {
 	return func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
 		if err = modifyRequest(result.RequestModifier(), req); err != nil {
 			return

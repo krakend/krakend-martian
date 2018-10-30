@@ -9,6 +9,7 @@ import (
 	"github.com/devopsfaith/krakend-viper"
 	"github.com/devopsfaith/krakend/proxy"
 	krakendgin "github.com/devopsfaith/krakend/router/gin"
+	"github.com/devopsfaith/krakend/transport/http/client"
 	"github.com/gin-gonic/gin"
 
 	"github.com/devopsfaith/krakend-martian"
@@ -39,7 +40,7 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	backendFactory := martian.NewBackendFactory(logger, proxy.DefaultHTTPRequestExecutor(proxy.NewHTTPClient))
+	backendFactory := martian.NewBackendFactory(logger, client.DefaultHTTPRequestExecutor(client.NewHTTPClient))
 
 	routerFactory := krakendgin.NewFactory(krakendgin.Config{
 		Engine:         gin.Default(),
