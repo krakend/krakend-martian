@@ -1,0 +1,23 @@
+[[constraint]]
+  name = "github.com/devopsfaith/krakend"
+  version = "0.7.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/devopsfaith/krakend-gologging"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/devopsfaith/krakend-viper"
+
+[[constraint]]
+  name = "github.com/gin-gonic/gin"
+  version = "1.3.0"
+
+[[constraint]]
+  name = "github.com/google/martian"
+  version = "2.1.0"
+
+[prune]
+  go-tests = true
+  unused-packages = true
