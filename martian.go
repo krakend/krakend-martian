@@ -18,6 +18,7 @@ import (
 	_ "github.com/google/martian/body"
 	_ "github.com/google/martian/fifo"
 	_ "github.com/google/martian/header"
+	_ "github.com/google/martian/status"
 	"github.com/google/martian/parse"
 )
 
