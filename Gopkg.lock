@@ -76,7 +76,7 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:1851cf9b272509c8eb288d8d9177a31209c34521d5f5faefb668f2cb27023a40"
+  digest = "1:aa60690915275ee2a758b857ee5fa1c37deafbd47e9f4d1a3672ae781528fc98"
   name = "github.com/google/martian"
   packages = [
     ".",
@@ -88,6 +88,7 @@
     "mitm",
     "parse",
     "proxyutil",
+    "status",
     "verify",
   ]
   pruneopts = "UT"
@@ -282,6 +283,7 @@
     "github.com/google/martian/fifo",
     "github.com/google/martian/header",
     "github.com/google/martian/parse",
+    "github.com/google/martian/status",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
