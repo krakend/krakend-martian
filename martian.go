@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -24,7 +24,6 @@ import (
 	_ "github.com/google/martian/port"
 	_ "github.com/google/martian/priority"
 	_ "github.com/google/martian/stash"
-	_ "github.com/google/martian/static"
 	_ "github.com/google/martian/status"
 )
 
@@ -37,6 +36,8 @@ func NewBackendFactory(logger logging.Logger, re client.HTTPRequestExecutor) pro
 // NewConfiguredBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
 // If there is any problem parsing the extra config data, it just uses the injected request executor.
 func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) client.HTTPRequestExecutor) proxy.BackendFactory {
+	parse.Register("static.Modifier", staticModifierFromJSON)
+
 	return func(remote *config.Backend) proxy.Proxy {
 		re := ref(remote)
 		result, ok := ConfigGetter(remote.ExtraConfig).(Result)
@@ -62,17 +63,27 @@ func HTTPRequestExecutor(result *parse.Result, re client.HTTPRequestExecutor) cl
 		if err = modifyRequest(result.RequestModifier(), req); err != nil {
 			return
 		}
-		resp, err = re(ctx, req)
-		if err != nil {
-			return
+
+		mctx, ok := req.Context().(*Context)
+		if !ok || !mctx.SkippingRoundTrip() {
+			resp, err = re(ctx, req)
+			if err != nil {
+				return
+			}
+			if resp == nil {
+				err = ErrEmptyResponse
+				return
+			}
+		} else if resp == nil {
+			resp = &http.Response{
+				Request:    req,
+				Header:     http.Header{},
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(bytes.NewBufferString("")),
+			}
 		}
-		if resp == nil {
-			err = ErrEmptyResponse
-			return
-		}
-		if err = modifyResponse(result.ResponseModifier(), resp); err != nil {
-			return
-		}
+
+		err = modifyResponse(result.ResponseModifier(), resp)
 		return
 	}
 }
@@ -97,6 +108,9 @@ func modifyResponse(mod martian.ResponseModifier, resp *http.Response) error {
 	}
 	if resp.Header == nil {
 		resp.Header = http.Header{}
+	}
+	if resp.StatusCode == 0 {
+		resp.StatusCode = http.StatusOK
 	}
 
 	if mod == nil {
@@ -139,11 +153,11 @@ func ConfigGetter(e config.ExtraConfig) interface{} {
 
 var (
 	// ErrEmptyValue is the error returned when there is no config under the namespace
-	ErrEmptyValue = fmt.Errorf("getting the extra config for the martian module")
+	ErrEmptyValue = errors.New("getting the extra config for the martian module")
 	// ErrBadValue is the error returned when the config is not a map
-	ErrBadValue = fmt.Errorf("casting the extra config for the martian module")
+	ErrBadValue = errors.New("casting the extra config for the martian module")
 	// ErrMarshallingValue is the error returned when the config map can not be marshalled again
-	ErrMarshallingValue = fmt.Errorf("marshalling the extra config for the martian module")
+	ErrMarshallingValue = errors.New("marshalling the extra config for the martian module")
 	// ErrEmptyResponse is the error returned when the modifier receives a nil response
-	ErrEmptyResponse = fmt.Errorf("getting the http response from the request executor")
+	ErrEmptyResponse = errors.New("getting the http response from the request executor")
 )
