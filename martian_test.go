@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
+	"path"
 	"testing"
 
 	"github.com/devopsfaith/krakend/config"
@@ -321,6 +323,69 @@ func TestHTTPRequestExecutor_NoPanicWhenScopeLimitedToRequest(t *testing.T) {
 	}
 	if resp.StatusCode != 200 {
 		t.Errorf("unexpected response: %v", *resp)
+	}
+}
+
+func TestHTTPRequestExecutor_static(t *testing.T) {
+	tmpdir, err := ioutil.TempDir("", "test_static_modifier_explicit_path_mapping_")
+	if err != nil {
+		t.Fatalf("ioutil.TempDir(): got %v, want no error", err)
+	}
+
+	if err := os.MkdirAll(path.Join(tmpdir, "explicit/path"), 0777); err != nil {
+		t.Fatalf("os.Mkdir(): got %v, want no error", err)
+	}
+
+	if err := ioutil.WriteFile(path.Join(tmpdir, "sfmtest.txt"), []byte("dont return"), 0777); err != nil {
+		t.Fatalf("ioutil.WriteFile(): got %v, want no error", err)
+	}
+
+	re := func(_ context.Context, req *http.Request) (resp *http.Response, err error) {
+		t.Error("the request executor should not be called")
+		return
+	}
+
+	msg := []byte(fmt.Sprintf(`{
+		"static.Modifier": {
+			"scope": ["request", "response"],
+			"explicitPaths": {"/foo/bar.baz": "/subdir/sfmtest.txt"},
+			"rootPath": %q
+		}
+	}`, tmpdir))
+
+	r, err := parse.FromJSON(msg)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	re = HTTPRequestExecutor(r, re)
+
+	req, _ := http.NewRequest("GET", "/sfmtest.txt", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if err != nil {
+		t.Error(err)
+	}
+	if resp == nil {
+		t.Errorf("unexpected response: %v", *resp)
+	}
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("unexpected response status: %d", resp.StatusCode)
+	}
+	if resp.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+		t.Errorf("unexpected custom header: %s", resp.Header.Get("Content-Type"))
+	}
+
+	req, _ = http.NewRequest("GET", "url", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err = re(context.Background(), req)
+	if err != nil {
+		t.Error(err)
+	}
+	if resp == nil {
+		t.Errorf("unexpected response: %v", *resp)
+	}
+	if resp.StatusCode != http.StatusNotFound {
+		t.Errorf("unexpected response status: %d", resp.StatusCode)
 	}
 }
 
