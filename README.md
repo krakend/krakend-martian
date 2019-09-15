@@ -14,7 +14,7 @@ Add your martian DSL definition under the "github.com/devopsfaith/krakend-martia
 
 More details here: https://github.com/google/martian#modifiers-all-the-way-down
 
-Check the [example](github.com/krakend-martian/tree/master/example) folder for a complete demo.
+Check the [example](https://github.com/devopsfaith/krakend-martian/tree/master/example) folder for a complete demo.
 
 ## Example
 
@@ -41,7 +41,7 @@ $ curl -i 127.0.0.1:8000/supu
   {"msg":"you rock!"}
  ```
 
-And check the logs of the KrakenD: the request modifiers has done their job!
+And check the logs of the KrakenD: the request modifiers have done their job!
 See how `{"msg":"you rock!"}` was added to the payload.
 
 ```
