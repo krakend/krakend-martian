@@ -40,6 +40,31 @@
                     }
                 }
             ]
+        },
+        {
+            "endpoint": "/health",
+            "backend": [
+                {
+                    "url_pattern": "/",
+                    "host": [
+                        "http://fake-backend"
+                    ],
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend-martian": {
+                            "static.Modifier": {
+                                "scope": [
+                                    "request",
+                                    "response"
+                                ],
+                                "rootPath": "/etc/krakend/static",
+                                "explicitPaths": {
+                                    "/": "/health.json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
         }
     ]
 }
