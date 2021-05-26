@@ -7,10 +7,10 @@ import (
 
 	"github.com/devopsfaith/krakend-gologging"
 	"github.com/devopsfaith/krakend-viper"
-	"github.com/devopsfaith/krakend/proxy"
-	krakendgin "github.com/devopsfaith/krakend/router/gin"
-	"github.com/devopsfaith/krakend/transport/http/client"
 	"github.com/gin-gonic/gin"
+	"github.com/luraproject/lura/proxy"
+	krakendgin "github.com/luraproject/lura/router/gin"
+	"github.com/luraproject/lura/transport/http/client"
 
 	"github.com/devopsfaith/krakend-martian"
 )
