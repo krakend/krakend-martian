@@ -15,6 +15,7 @@ import (
 	"github.com/luraproject/lura/config"
 	"github.com/luraproject/lura/logging"
 	"github.com/luraproject/lura/proxy"
+	"github.com/luraproject/lura/transport/http/client"
 )
 
 func TestHTTPRequestExecutor_ok(t *testing.T) {
@@ -185,6 +186,88 @@ func TestHTTPRequestExecutor_koErroredRequest(t *testing.T) {
 	}
 	if resp != nil {
 		t.Errorf("unexpected response: %v", *resp)
+	}
+}
+
+func TestNewRequestExecutorFactory_noExtra(t *testing.T) {
+	expectedErr := fmt.Errorf("some error")
+	re := func(_ context.Context, _ *http.Request) (resp *http.Response, err error) { return nil, expectedErr }
+	ref := func(_ *config.Backend) client.HTTPRequestExecutor { return re }
+	buf := bytes.NewBuffer(make([]byte, 1024))
+	l, _ := logging.NewLogger("DEBUG", buf, "")
+	ref = NewRequestExecutorFactory(l, ref)
+	re = ref(&config.Backend{})
+	req, _ := http.NewRequest("GET", "http://example.com/", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if resp != nil {
+		t.Error("unexpected response:", resp)
+	}
+	if err != expectedErr {
+		t.Error("unexpected error:", err)
+	}
+}
+
+func TestNewRequestExecutorFactory_wrongExtra(t *testing.T) {
+	expectedErr := fmt.Errorf("some error")
+	re := func(_ context.Context, _ *http.Request) (resp *http.Response, err error) { return nil, expectedErr }
+	ref := func(_ *config.Backend) client.HTTPRequestExecutor { return re }
+	buf := bytes.NewBuffer(make([]byte, 1024))
+	l, _ := logging.NewLogger("DEBUG", buf, "")
+	ref = NewRequestExecutorFactory(l, ref)
+	re = ref(&config.Backend{
+		ExtraConfig: config.ExtraConfig{
+			Namespace: 42,
+		},
+	})
+	req, _ := http.NewRequest("GET", "http://example.com/", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if resp != nil {
+		t.Error("unexpected response:", resp)
+	}
+	if err != expectedErr {
+		t.Error("unexpected error:", err)
+	}
+}
+
+func TestNewRequestExecutorFactory_ok(t *testing.T) {
+	expectedHdr := "ouh yeah!"
+	expectedErr := fmt.Errorf("some error")
+	re := func(_ context.Context, r *http.Request) (resp *http.Response, err error) {
+		if header := r.Header.Get("X-Martian"); header != expectedHdr {
+			t.Error("unexpected request header:", header)
+		}
+		return nil, expectedErr
+	}
+	ref := func(_ *config.Backend) client.HTTPRequestExecutor { return re }
+	buf := bytes.NewBuffer(make([]byte, 1024))
+	l, _ := logging.NewLogger("DEBUG", buf, "")
+	ref = NewRequestExecutorFactory(l, ref)
+	re = ref(&config.Backend{
+		ExtraConfig: config.ExtraConfig{
+			Namespace: map[string]interface{}{
+				"fifo.Group": map[string]interface{}{
+					"scope":           []interface{}{"request", "response"},
+					"aggregateErrors": true,
+					"modifiers": []map[string]interface{}{
+						{
+							"header.Modifier": map[string]interface{}{
+								"scope": []interface{}{"request", "response"},
+								"name":  "X-Martian",
+								"value": expectedHdr,
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+	req, _ := http.NewRequest("GET", "http://example.com/", ioutil.NopCloser(bytes.NewBufferString("")))
+	resp, err := re(context.Background(), req)
+	if resp != nil {
+		t.Error("unexpected response:", resp)
+	}
+	if err != expectedErr {
+		t.Error("unexpected error:", err)
 	}
 }
 
