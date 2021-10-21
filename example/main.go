@@ -5,14 +5,13 @@ import (
 	"flag"
 	"log"
 
-	"github.com/devopsfaith/krakend-gologging"
-	"github.com/devopsfaith/krakend-viper"
+	gologging "github.com/devopsfaith/krakend-gologging/v2"
+	martian "github.com/devopsfaith/krakend-martian/v2"
+	viper "github.com/devopsfaith/krakend-viper/v2"
 	"github.com/gin-gonic/gin"
-	"github.com/luraproject/lura/proxy"
-	krakendgin "github.com/luraproject/lura/router/gin"
-	"github.com/luraproject/lura/transport/http/client"
-
-	"github.com/devopsfaith/krakend-martian"
+	"github.com/luraproject/lura/v2/proxy"
+	krakendgin "github.com/luraproject/lura/v2/router/gin"
+	"github.com/luraproject/lura/v2/transport/http/client"
 )
 
 func main() {

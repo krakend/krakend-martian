@@ -1,7 +1,7 @@
 package martian
 
 import (
-	"github.com/devopsfaith/krakend-martian/register"
+	"github.com/devopsfaith/krakend-martian/v2/register"
 	"github.com/google/martian/parse"
 )
 
