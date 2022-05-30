@@ -1,4 +1,4 @@
-module github.com/devopsfaith/krakend-martian/v2
+module github.com/krakendio/krakend-martian/v2
 
 go 1.17
 
