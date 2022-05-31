@@ -41,10 +41,10 @@ github.com/krakendio/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534 h1:
 github.com/krakendio/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534/go.mod h1:v8Mlie1z2Pco262YdVXF6g+C0UqTAsgHrw4S+Sa+QBU=
 github.com/krakendio/krakend-gologging/v2 v2.0.0 h1:Exnsls6rXmUWpO7KyAxgBexu25zHv9u1EAeDC6U2hAI=
 github.com/krakendio/krakend-gologging/v2 v2.0.0/go.mod h1:hgavNPcgZJk+JPgvOTkzSOdm6oQDirxHD+keFuxeDKc=
-github.com/devopsfaith/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68 h1:IjWucnPa9ODL2k+iJV96dCgUD5KJbS4Q/uY3591kPpo=
-github.com/devopsfaith/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68/go.mod h1:9ng5WbNPGzQkKuBfm9gceddqg9Drdm9jWz7UwykoSv4=
-github.com/devopsfaith/krakend-viper/v2 v2.0.0 h1:DA5H28lKrCsLqDlQ0q6O8eHWWIJ8CcLRPygegkCSIFo=
-github.com/devopsfaith/krakend-viper/v2 v2.0.0/go.mod h1:SEbfC8rxArMBdDeGB+aMvlSvM6wa7Kt2JQOqVbUmr7s=
+github.com/krakendio/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68 h1:IjWucnPa9ODL2k+iJV96dCgUD5KJbS4Q/uY3591kPpo=
+github.com/krakendio/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68/go.mod h1:9ng5WbNPGzQkKuBfm9gceddqg9Drdm9jWz7UwykoSv4=
+github.com/krakendio/krakend-viper/v2 v2.0.0 h1:DA5H28lKrCsLqDlQ0q6O8eHWWIJ8CcLRPygegkCSIFo=
+github.com/krakendio/krakend-viper/v2 v2.0.0/go.mod h1:SEbfC8rxArMBdDeGB+aMvlSvM6wa7Kt2JQOqVbUmr7s=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/dgryski/go-sip13 v0.0.0-20181026042036-e10d5fee7954/go.mod h1:vAd38F8PWV+bWy6jNmig1y/TA+kYO4g3RSRF0IAv0no=
 github.com/dimfeld/httptreemux/v5 v5.3.0/go.mod h1:QeEylH57C0v3VO0tkKraVz9oD3Uu93CKPnTLbsidvSw=

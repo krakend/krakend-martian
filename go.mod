@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/krakendio/krakend-gologging/v2 v2.0.0
-	github.com/devopsfaith/krakend-viper/v2 v2.0.0
+	github.com/krakendio/krakend-viper/v2 v2.0.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/martian v2.1.0+incompatible
 	github.com/luraproject/lura/v2 v2.0.0
