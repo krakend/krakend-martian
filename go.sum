@@ -37,10 +37,10 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/krakendio/flatmap v0.0.0-20200601181759-8521186182fc h1:WM1VdC8LW8GIZUJuvXgQWm6LcZ8niL0D0WVuC3lKkQU=
 github.com/krakendio/flatmap v0.0.0-20200601181759-8521186182fc/go.mod h1:J9Y/58s7wx7HbHT3i4UKNwLGuBB9qCf0/JUdEFGDPmA=
-github.com/devopsfaith/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534 h1:ipc5YExAZEmiLZgHNdXv4skjOnflT3cI0dqw+cf3GpM=
-github.com/devopsfaith/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534/go.mod h1:v8Mlie1z2Pco262YdVXF6g+C0UqTAsgHrw4S+Sa+QBU=
-github.com/devopsfaith/krakend-gologging/v2 v2.0.0 h1:Exnsls6rXmUWpO7KyAxgBexu25zHv9u1EAeDC6U2hAI=
-github.com/devopsfaith/krakend-gologging/v2 v2.0.0/go.mod h1:hgavNPcgZJk+JPgvOTkzSOdm6oQDirxHD+keFuxeDKc=
+github.com/krakendio/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534 h1:ipc5YExAZEmiLZgHNdXv4skjOnflT3cI0dqw+cf3GpM=
+github.com/krakendio/krakend-gologging/v2 v2.0.0-20211021151950-cc8f98a75534/go.mod h1:v8Mlie1z2Pco262YdVXF6g+C0UqTAsgHrw4S+Sa+QBU=
+github.com/krakendio/krakend-gologging/v2 v2.0.0 h1:Exnsls6rXmUWpO7KyAxgBexu25zHv9u1EAeDC6U2hAI=
+github.com/krakendio/krakend-gologging/v2 v2.0.0/go.mod h1:hgavNPcgZJk+JPgvOTkzSOdm6oQDirxHD+keFuxeDKc=
 github.com/devopsfaith/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68 h1:IjWucnPa9ODL2k+iJV96dCgUD5KJbS4Q/uY3591kPpo=
 github.com/devopsfaith/krakend-viper/v2 v2.0.0-20211020152843-fef58b415f68/go.mod h1:9ng5WbNPGzQkKuBfm9gceddqg9Drdm9jWz7UwykoSv4=
 github.com/devopsfaith/krakend-viper/v2 v2.0.0 h1:DA5H28lKrCsLqDlQ0q6O8eHWWIJ8CcLRPygegkCSIFo=

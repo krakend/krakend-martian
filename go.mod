@@ -3,7 +3,7 @@ module github.com/krakendio/krakend-martian/v2
 go 1.17
 
 require (
-	github.com/devopsfaith/krakend-gologging/v2 v2.0.0
+	github.com/krakendio/krakend-gologging/v2 v2.0.0
 	github.com/devopsfaith/krakend-viper/v2 v2.0.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/martian v2.1.0+incompatible
