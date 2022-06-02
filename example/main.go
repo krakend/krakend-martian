@@ -5,10 +5,10 @@ import (
 	"flag"
 	"log"
 
-	gologging "github.com/devopsfaith/krakend-gologging/v2"
-	martian "github.com/devopsfaith/krakend-martian/v2"
-	viper "github.com/devopsfaith/krakend-viper/v2"
 	"github.com/gin-gonic/gin"
+	gologging "github.com/krakendio/krakend-gologging/v2"
+	martian "github.com/krakendio/krakend-martian/v2"
+	viper "github.com/krakendio/krakend-viper/v2"
 	"github.com/luraproject/lura/v2/proxy"
 	krakendgin "github.com/luraproject/lura/v2/router/gin"
 	"github.com/luraproject/lura/v2/transport/http/client"
