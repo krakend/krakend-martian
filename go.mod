@@ -3,15 +3,14 @@ module github.com/krakendio/krakend-martian/v2
 go 1.17
 
 require (
-	github.com/krakendio/krakend-gologging/v2 v2.0.0
-	github.com/krakendio/krakend-viper/v2 v2.0.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/martian v2.1.0+incompatible
-	github.com/luraproject/lura/v2 v2.0.0
+	github.com/krakendio/krakend-gologging/v2 v2.0.0-20220601173040-76719e203514
+	github.com/krakendio/krakend-viper/v2 v2.0.0-20220602174943-1b0451efbd02
+	github.com/luraproject/lura/v2 v2.0.0-20220601150625-abb94fb9730d
 )
 
 require (
-	github.com/krakendio/flatmap v0.0.0-20200601181759-8521186182fc // indirect
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -20,6 +19,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/krakendio/flatmap v0.0.0-20220531185225-4cb0ad6fbedd // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
