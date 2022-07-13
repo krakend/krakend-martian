@@ -4,6 +4,9 @@ import (
 	"context"
 	"flag"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gin-gonic/gin"
 	gologging "github.com/krakendio/krakend-gologging/v2"
@@ -12,6 +15,7 @@ import (
 	"github.com/luraproject/lura/v2/proxy"
 	krakendgin "github.com/luraproject/lura/v2/router/gin"
 	"github.com/luraproject/lura/v2/transport/http/client"
+	"github.com/luraproject/lura/v2/transport/http/server"
 )
 
 func main() {
@@ -35,10 +39,6 @@ func main() {
 		log.Fatal("ERROR:", err.Error())
 	}
 
-	logger.Debug("config:", serviceConfig)
-
-	ctx, cancel := context.WithCancel(context.Background())
-
 	backendFactory := martian.NewBackendFactory(logger, client.DefaultHTTPRequestExecutor(client.NewHTTPClient))
 
 	routerFactory := krakendgin.NewFactory(krakendgin.Config{
@@ -46,9 +46,24 @@ func main() {
 		Logger:         logger,
 		HandlerFactory: krakendgin.EndpointHandler,
 		ProxyFactory:   proxy.NewDefaultFactory(backendFactory, logger),
+		RunServer:      server.RunServer,
 	})
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go func() {
+		select {
+		case sig := <-sigs:
+			logger.Info("Signal intercepted:", sig)
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
 
 	routerFactory.NewWithContext(ctx).Run(serviceConfig)
 
-	cancel()
+	// cancel()
 }
