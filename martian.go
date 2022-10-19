@@ -23,9 +23,10 @@ import (
 	"github.com/google/martian/parse"
 	_ "github.com/google/martian/port"
 	_ "github.com/google/martian/priority"
+	_ "github.com/google/martian/querystring"
 	_ "github.com/google/martian/stash"
 	_ "github.com/google/martian/status"
-	_ "github.com/google/martian/querystring"
+	"github.com/krakendio/krakend-martian/v2/header"
 )
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
@@ -38,6 +39,7 @@ func NewBackendFactory(logger logging.Logger, re client.HTTPRequestExecutor) pro
 // If there is any problem parsing the extra config data, it just uses the injected request executor.
 func NewConfiguredBackendFactory(logger logging.Logger, ref func(*config.Backend) client.HTTPRequestExecutor) proxy.BackendFactory {
 	parse.Register("static.Modifier", staticModifierFromJSON)
+	parse.Register("header.Id", header.IdModifierFromJSON)
 
 	return func(remote *config.Backend) proxy.Proxy {
 		re := ref(remote)
