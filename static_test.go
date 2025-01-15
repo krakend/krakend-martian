@@ -198,7 +198,6 @@ func TestStaticModifierOnRequest(t *testing.T) {
 	mod := NewStaticModifier(tmpdir)
 	if err := mod.ModifyRequest(req); err != nil {
 		t.Fatalf("ModifyRequest(): got %v, want no error", err)
-
 	}
 	if err := mod.ModifyResponse(res); err != nil {
 		t.Fatalf("ModifyResponse(): got %v, want no error", err)
@@ -251,7 +250,6 @@ func TestRequestOverHTTPS(t *testing.T) {
 	mod := NewStaticModifier(tmpdir)
 	if err := mod.ModifyRequest(req); err != nil {
 		t.Fatalf("ModifyRequest(): got %v, want no error", err)
-
 	}
 	if err := mod.ModifyResponse(res); err != nil {
 		t.Fatalf("ModifyResponse(): got %v, want no error", err)
@@ -274,7 +272,6 @@ func TestRequestOverHTTPS(t *testing.T) {
 	if got, want := res.ContentLength, int64(len("test file")); got != want {
 		t.Errorf("res.ContentLength: got %v, want %v", got, want)
 	}
-
 }
 
 func TestModifierFromJSON(t *testing.T) {
@@ -397,7 +394,6 @@ func TestModifierFromJSON(t *testing.T) {
 	if got, want := res.ContentLength, int64(len("test file2")); got != want {
 		t.Errorf("res.ContentLength: got %v, want %v", got, want)
 	}
-
 }
 
 func TestStaticModifierSingleRangeRequest(t *testing.T) {
@@ -425,7 +421,6 @@ func TestStaticModifierSingleRangeRequest(t *testing.T) {
 
 	if err := mod.ModifyRequest(req); err != nil {
 		t.Fatalf("ModifyRequest(): got %v, want no error", err)
-
 	}
 
 	res := proxyutil.NewResponse(http.StatusOK, nil, req)
