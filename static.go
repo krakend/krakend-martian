@@ -30,7 +30,7 @@ func NewStaticModifier(rootPath string) *StaticModifier {
 
 // ModifyRequest marks the context to skip the roundtrip and downgrades any https requests
 // to http.
-func (s *StaticModifier) ModifyRequest(req *http.Request) error {
+func (*StaticModifier) ModifyRequest(req *http.Request) error {
 	ctx := NewContext(req.Context())
 	ctx.SkipRoundTrip()
 
