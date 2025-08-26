@@ -26,7 +26,7 @@ import (
 	_ "github.com/google/martian/querystring"
 	_ "github.com/google/martian/stash"
 	_ "github.com/google/martian/status"
-	"github.com/krakendio/krakend-martian/v2/header"
+	"github.com/krakend/krakend-martian/v2/header"
 )
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.

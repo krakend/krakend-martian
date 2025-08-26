@@ -9,9 +9,9 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	gologging "github.com/krakendio/krakend-gologging/v2"
-	martian "github.com/krakendio/krakend-martian/v2"
-	viper "github.com/krakendio/krakend-viper/v2"
+	gologging "github.com/krakend/krakend-gologging/v2"
+	martian "github.com/krakend/krakend-martian/v2"
+	viper "github.com/krakend/krakend-viper/v2"
 	"github.com/luraproject/lura/v2/proxy"
 	krakendgin "github.com/luraproject/lura/v2/router/gin"
 	"github.com/luraproject/lura/v2/transport/http/client"

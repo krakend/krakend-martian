@@ -14,7 +14,7 @@ Add your martian DSL definition under the "github.com/devopsfaith/krakend-martia
 
 More details here: https://github.com/google/martian#modifiers-all-the-way-down
 
-Check the [example](https://github.com/krakendio/krakend-martian/tree/master/example) folder for a complete demo.
+Check the [example](https://github.com/krakend/krakend-martian/tree/master/example) folder for a complete demo.
 
 ## Example
 
