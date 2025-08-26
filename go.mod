@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/martian v2.1.0+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/krakend/krakend-gologging/v2 v2.1.0
+	github.com/krakend/krakend-gologging/v2 v2.1.1
 	github.com/krakend/krakend-viper/v2 v2.1.0
 	github.com/luraproject/lura/v2 v2.11.0
 )
