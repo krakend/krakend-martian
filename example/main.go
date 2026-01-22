@@ -10,8 +10,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	gologging "github.com/krakend/krakend-gologging/v2"
+	koanf "github.com/krakend/krakend-koanf"
 	martian "github.com/krakend/krakend-martian/v2"
-	viper "github.com/krakend/krakend-viper/v2"
 	"github.com/luraproject/lura/v2/proxy"
 	krakendgin "github.com/luraproject/lura/v2/router/gin"
 	"github.com/luraproject/lura/v2/transport/http/client"
@@ -24,7 +24,7 @@ func main() {
 	configFile := flag.String("c", "/etc/krakend/configuration.json", "Path to the configuration filename")
 	flag.Parse()
 
-	parser := viper.New()
+	parser := koanf.New()
 	serviceConfig, err := parser.Parse(*configFile)
 	if err != nil {
 		log.Fatal("ERROR:", err.Error())
