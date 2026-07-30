@@ -9,13 +9,13 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	gologging "github.com/krakend/krakend-gologging/v2"
-	koanf "github.com/krakend/krakend-koanf"
-	martian "github.com/krakend/krakend-martian/v2"
-	"github.com/luraproject/lura/v2/proxy"
-	krakendgin "github.com/luraproject/lura/v2/router/gin"
-	"github.com/luraproject/lura/v2/transport/http/client"
-	"github.com/luraproject/lura/v2/transport/http/server"
+	gologging "github.com/krakend/krakend-gologging/v3"
+	martian "github.com/krakend/krakend-martian/v3"
+	"github.com/luraproject/lura/v3/config"
+	"github.com/luraproject/lura/v3/proxy"
+	krakendgin "github.com/luraproject/lura/v3/router/gin"
+	"github.com/luraproject/lura/v3/transport/http/client"
+	"github.com/luraproject/lura/v3/transport/http/server"
 )
 
 func main() {
@@ -24,8 +24,7 @@ func main() {
 	configFile := flag.String("c", "/etc/krakend/configuration.json", "Path to the configuration filename")
 	flag.Parse()
 
-	parser := koanf.New()
-	serviceConfig, err := parser.Parse(*configFile)
+	serviceConfig, err := config.NewParser().Parse(*configFile)
 	if err != nil {
 		log.Fatal("ERROR:", err.Error())
 	}
