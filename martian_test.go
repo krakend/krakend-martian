@@ -332,11 +332,11 @@ func TestHTTPRequestExecutor_static(t *testing.T) {
 		t.Fatalf("ioutil.TempDir(): got %v, want no error", err)
 	}
 
-	if err := os.MkdirAll(path.Join(tmpdir, "explicit/path"), 0o777); err != nil {
+	if err := os.MkdirAll(path.Join(tmpdir, "explicit/path"), 0o750); err != nil {
 		t.Fatalf("os.Mkdir(): got %v, want no error", err)
 	}
 
-	if err := ioutil.WriteFile(path.Join(tmpdir, "sfmtest.txt"), []byte("dont return"), 0o777); err != nil {
+	if err := ioutil.WriteFile(path.Join(tmpdir, "sfmtest.txt"), []byte("dont return"), 0o750); err != nil {
 		t.Fatalf("ioutil.WriteFile(): got %v, want no error", err)
 	}
 
