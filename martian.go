@@ -8,10 +8,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/luraproject/lura/v2/config"
-	"github.com/luraproject/lura/v2/logging"
-	"github.com/luraproject/lura/v2/proxy"
-	"github.com/luraproject/lura/v2/transport/http/client"
+	"github.com/luraproject/lura/v3/config"
+	"github.com/luraproject/lura/v3/logging"
+	"github.com/luraproject/lura/v3/proxy"
+	"github.com/luraproject/lura/v3/transport/http/client"
 
 	// import the required martian packages so they can be used
 	"github.com/google/martian"
@@ -26,7 +26,7 @@ import (
 	_ "github.com/google/martian/querystring"
 	_ "github.com/google/martian/stash"
 	_ "github.com/google/martian/status"
-	"github.com/krakend/krakend-martian/v2/header"
+	"github.com/krakend/krakend-martian/v3/header"
 )
 
 // NewBackendFactory creates a proxy.BackendFactory with the martian request executor wrapping the injected one.
@@ -123,7 +123,7 @@ func modifyResponse(mod martian.ResponseModifier, resp *http.Response) error {
 }
 
 // Namespace is the key to look for extra configuration details
-const Namespace = "github.com/devopsfaith/krakend-martian"
+const Namespace = "modifier/martian"
 
 // Result is a simple wrapper over the parse.FromJSON response tuple
 type Result struct {

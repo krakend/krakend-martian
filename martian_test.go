@@ -12,9 +12,9 @@ import (
 	"testing"
 
 	"github.com/google/martian/parse"
-	"github.com/luraproject/lura/v2/config"
-	"github.com/luraproject/lura/v2/logging"
-	"github.com/luraproject/lura/v2/proxy"
+	"github.com/luraproject/lura/v3/config"
+	"github.com/luraproject/lura/v3/logging"
+	"github.com/luraproject/lura/v3/proxy"
 )
 
 func TestHTTPRequestExecutor_ok(t *testing.T) {
@@ -332,11 +332,11 @@ func TestHTTPRequestExecutor_static(t *testing.T) {
 		t.Fatalf("ioutil.TempDir(): got %v, want no error", err)
 	}
 
-	if err := os.MkdirAll(path.Join(tmpdir, "explicit/path"), 0777); err != nil {
+	if err := os.MkdirAll(path.Join(tmpdir, "explicit/path"), 0o750); err != nil {
 		t.Fatalf("os.Mkdir(): got %v, want no error", err)
 	}
 
-	if err := ioutil.WriteFile(path.Join(tmpdir, "sfmtest.txt"), []byte("dont return"), 0777); err != nil {
+	if err := ioutil.WriteFile(path.Join(tmpdir, "sfmtest.txt"), []byte("dont return"), 0o750); err != nil {
 		t.Fatalf("ioutil.WriteFile(): got %v, want no error", err)
 	}
 

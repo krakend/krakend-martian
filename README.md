@@ -4,11 +4,11 @@ The `krakend-martian` package integrates the martian project into the KrakenD fr
 
 ## How to use it
 
-Add your martian DSL definition under the "github.com/devopsfaith/krakend-martian" namespace of the backend section of the config file
+Add your martian DSL definition under the "modifier/martian" namespace of the backend section of the config file
 
 ```
 "extra_config": {
-  "github.com/devopsfaith/krakend-martian": {}
+  "modifier/martian": {}
 }
 ```
 
