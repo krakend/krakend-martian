@@ -1,77 +1,78 @@
 {
-    "version": 3,
-    "name": "My lovely gateway",
-    "port": 8080,
-    "cache_ttl": 3600,
-    "timeout": "3s",
-    "extra_config": {
-        "github_com/devopsfaith/krakend-gologging": {
-            "level": "DEBUG",
-            "prefix": "[KRAKEND]",
-            "syslog": false,
-            "stdout": true
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "My lovely gateway",
+  "port": 8080,
+  "cache_ttl": "3600s",
+  "timeout": "3s",
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/supu",
+      "method": "GET",
+      "backend": [
+        {
+          "method": "GET",
+          "host": [
+            "https://api.github.com"
+          ],
+          "url_pattern": "/users/devopsfaith",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true,
+                "modifiers": [
+                  {
+                    "body.Modifier": {
+                      "scope": [
+                        "request",
+                        "response"
+                      ],
+                      "body": "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
+                    }
+                  }
+                ]
+              }
+            }
+          }
         }
+      ]
     },
-    "endpoints": [
+    {
+      "endpoint": "/health",
+      "backend": [
         {
-            "endpoint": "/supu",
-            "method": "GET",
-            "backend": [
-                {
-                    "method": "GET",
-                    "host": [
-                        "https://api.github.com"
-                    ],
-                    "url_pattern": "/users/devopsfaith",
-                    "extra_config": {
-                        "github.com/devopsfaith/krakend-martian": {
-                            "fifo.Group": {
-                                "scope": [
-                                    "request",
-                                    "response"
-                                ],
-                                "aggregateErrors": true,
-                                "modifiers": [
-                                    {
-                                        "body.Modifier": {
-                                            "scope": [
-                                                "request",
-                                                "response"
-                                            ],
-                                            "body": "eyJtc2ciOiJ5b3Ugcm9jayEifQ=="
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
+          "url_pattern": "/",
+          "host": [
+            "http://fake-backend"
+          ],
+          "extra_config": {
+            "modifier/martian": {
+              "static.Modifier": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "rootPath": "example/static",
+                "explicitPaths": {
+                  "/": "/health.json"
                 }
-            ]
-        },
-        {
-            "endpoint": "/health",
-            "backend": [
-                {
-                    "url_pattern": "/",
-                    "host": [
-                        "http://fake-backend"
-                    ],
-                    "extra_config": {
-                        "github.com/devopsfaith/krakend-martian": {
-                            "static.Modifier": {
-                                "scope": [
-                                    "request",
-                                    "response"
-                                ],
-                                "rootPath": "example/static",
-                                "explicitPaths": {
-                                    "/": "/health.json"
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
+              }
+            }
+          }
         }
-    ]
+      ]
+    }
+  ]
 }
